@@ -8,6 +8,9 @@ module.exports = function(app) {
     //Retrive Approved Issues
     app.get('/api/issues/getApproved', issues.adminGetApproved);
 
+    //Retrive pending Issues
+    app.get('/api/issues/pending', issues.adminPendingIssues);
+
     //Retrive Decline Issues
     app.get('/api/issues/getDeclined', issues.adminGetDeclined);
 

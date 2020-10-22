@@ -136,6 +136,23 @@ exports.adminGetApproved = async (req, res) => {
     }
 };
 
+exports.adminPendingIssues = async (req, res) => {
+    const issues = await Issue.findAll({
+        where: {
+            status: 0,
+        }
+    });
+
+    if (issues.length != 0) {
+      res.send(issues);
+    } else {
+        res.send({
+            message: 'no data'
+        })
+    }
+};
+
+
 exports.adminGetDeclined = async (req, res) => {
     const issues = await Issue.findAll({
         where: {
