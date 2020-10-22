@@ -8,7 +8,8 @@ exports.createIssue = (req, res) => {
         issue: req.body.issue,
         user_id: req.body.user_id,
         status: 0,
-        sent: 0
+        sent: 0,
+        categoryId: req.body.categoryId
     })
         .then((issue) => {
             console.log(">> Created issue: " + JSON.stringify(issue, null, 4));
@@ -18,7 +19,10 @@ exports.createIssue = (req, res) => {
             });
         })
         .catch((err) => {
-            console.log(">> Error while creating tutorial: ", err);
+            res.send({
+                message: ">> Error while creating issue: ",
+                error: err
+            })
         });
 };
 
@@ -51,12 +55,12 @@ exports.createComment = (req, res) => {
 };
 
 exports.findIssueById = (req, res) => {
-    return Issue.findByPk(req.params.issueId, { include: ["comments"] })
+    return Issue.findByPk(req.params.issueId, { include: ["comments", "category"] })
         .then((issue) => {
             res.send(issue);
         })
         .catch((err) => {
-            console.log(">> Error while finding tutorial: ", err);
+            res.send(">> Error while finding issue: ");
         });
 };
 
@@ -72,7 +76,7 @@ exports.findCommentById = (id) => {
 
 exports.findAll = (req, res) => {
     return Issue.findAll({
-        include: ["comments"],
+        include: ["comments", "category"],
     }).then((issues) => {
         if(issues.length != 0) {
             res.send(issues);
@@ -92,6 +96,9 @@ exports.findAll = (req, res) => {
 exports.getApproved = async (req, res) => {
     // console.log('started');
     const issues = await Issue.findAll({
+        include: [
+            "category"
+        ],
         where: {
             status: 1,
             sent: 0
@@ -138,6 +145,9 @@ exports.adminGetApproved = async (req, res) => {
 
 exports.adminPendingIssues = async (req, res) => {
     const issues = await Issue.findAll({
+        include: [
+            "category"
+        ],
         where: {
             status: 0,
         }
@@ -155,6 +165,9 @@ exports.adminPendingIssues = async (req, res) => {
 
 exports.adminGetDeclined = async (req, res) => {
     const issues = await Issue.findAll({
+        include: [
+            "category"
+        ],
         where: {
             status: 3,
         }
@@ -274,3 +287,21 @@ exports.addDetails = (req, res) => {
         res.send(err);
     })
 };
+
+exports.getIssuesByCategory = (req, res) => {
+    Issue.findAll({
+        where: {
+            categoryId: req.params.categoryId,
+        }
+    }).then(issues => {
+        if (issues) {
+            res.send(issues);
+        } else {
+            res.send({
+                message: 'no data'
+            })
+        }
+    }).catch(err => {
+        res.send(err);
+    })
+}

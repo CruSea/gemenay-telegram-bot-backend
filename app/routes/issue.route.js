@@ -1,6 +1,9 @@
+const { categories } = require('../models');
+
 module.exports = function(app) {
  
     const issues = require('../controllers/issue.controller');
+    const categories = require('../controllers/category.controller');
  
     // Create a new Issue
     app.post('/api/issues', issues.createIssue);
@@ -12,7 +15,7 @@ module.exports = function(app) {
     app.get('/api/issues/pending', issues.adminPendingIssues);
 
     //Retrive Decline Issues
-    app.get('/api/issues/getDeclined', issues.adminGetDeclined);
+    app.get('/api/issues/declined', issues.adminGetDeclined);
 
     //Retrive Approved and unsent Issues
     app.get('/api/issues/approved', issues.getApproved);
@@ -43,4 +46,7 @@ module.exports = function(app) {
 
     // Create a comment for an Issue
     app.post('/api/issues/:issueId/comment', issues.createComment);
+
+    // get issues by category
+    app.get('/api/issues/:categoryId/issues', issues.getIssuesByCategory);
 }

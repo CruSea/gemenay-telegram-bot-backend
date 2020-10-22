@@ -21,11 +21,19 @@ db.sequelize = sequelize;
 
 db.issues = require("./issue.model.js")(sequelize, Sequelize);
 db.comments = require("./comment.model.js")(sequelize, Sequelize);
+db.categories = require("./category.model.js")(sequelize, Sequelize);
 
 db.issues.hasMany(db.comments, { as: "comments" });
 db.comments.belongsTo(db.issues, {
   foreignKey: "issueId",
   as: "issue",
+});
+db.categories.hasMany(db.issues, {
+    as: "issues"
+})
+db.issues.belongsTo(db.categories, {
+  foreignKey: "categoryId",
+  as: "category"
 });
 
 module.exports = db;

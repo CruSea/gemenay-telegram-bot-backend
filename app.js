@@ -21,6 +21,7 @@ db.sequelize.sync({
 
 require('./app/routes/issue.route')(app);
 require('./app/routes/comment.route')(app);
+require('./app/routes/category.route')(app);
 
 const PORT = process.env.PORT || 3000;
 
