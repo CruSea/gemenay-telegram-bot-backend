@@ -14,8 +14,8 @@ module.exports = function(app) {
     //Retrive pending Issues
     app.get('/api/issues/pending', issues.adminPendingIssues);
 
-    //Retrive Decline Issues
-    app.get('/api/issues/declined', issues.adminGetDeclined);
+    //Retrive Declined Issues
+    app.get('/api/issues/getDeclined', issues.adminGetDeclined);
 
     //Retrive Approved and unsent Issues
     app.get('/api/issues/approved', issues.getApproved);
